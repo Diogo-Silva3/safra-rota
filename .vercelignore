@@ -1,0 +1,11 @@
+.git
+.gitignore
+README.md
+src
+drizzle
+public
+.env
+.env.local
+.env.*.local
+node_modules
+.output
