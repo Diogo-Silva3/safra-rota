@@ -8,7 +8,7 @@ import { r as QueryClientProvider } from "../_libs/tanstack__react-query.mjs";
 import { t as QueryClient } from "../_libs/tanstack__query-core.mjs";
 import { t as accountOptions } from "./safra.functions-q2WhQcia.mjs";
 import { t as Toaster } from "../_libs/sonner.mjs";
-//#region node_modules/.nitro/vite/services/ssr/assets/router-DP-OZZjO.js
+//#region node_modules/.nitro/vite/services/ssr/assets/router-IvH-io_J.js
 var import_react = /* @__PURE__ */ __toESM(require_react());
 var import_jsx_dev_runtime = require_jsx_dev_runtime();
 var styles_default = "/assets/styles-DkcmM4-7.css";
