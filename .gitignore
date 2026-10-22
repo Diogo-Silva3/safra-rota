@@ -56,3 +56,4 @@ supabase/.temp/
 # Vite
 .vite/
 .vercel
+.env*
