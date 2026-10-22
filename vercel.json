@@ -1,6 +1,5 @@
 {
   "buildCommand": "npm run build",
   "outputDirectory": ".output/public",
-  "framework": "tanstack-start",
-  "nodeVersion": "24.x"
+  "framework": "tanstack-start"
 }
