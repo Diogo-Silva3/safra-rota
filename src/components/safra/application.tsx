@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from '@tanstack/react-router';
+import { useNavigate } from 'react-router-dom';
 import { useQueryClient } from '@tanstack/react-query';
 import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { QRCodeSVG } from 'qrcode.react';
@@ -27,7 +27,7 @@ export function Application({section = 'dashboard', account}: {section?:Section;
  const chart = demo?chartDemo:(()=>{let sum=0;const gains=[...transactions].reverse().filter(t=>t.kind==='scenario'||t.kind==='referral').map(t=>{sum+=t.amount_cents;return {day:new Date(t.created_at).toLocaleDateString('pt-BR',{day:'2-digit',month:'short'}),value:sum/100};});return gains.length?gains:[{day:'Início',value:0},{day:'Hoje',value:0}];})();
  const plot=period==='7 dias'?chart.slice(-3):chart;
  async function copy() { try {await navigator.clipboard.writeText(invite);toast.success('Link de convite copiado.');} catch {toast.error('Não foi possível copiar o link.');} }
- async function signOut(){await queryClient.cancelQueries();queryClient.clear();await supabase.auth.signOut();await navigate({to:'/auth',replace:true});}
+ async function signOut(){await queryClient.cancelQueries();queryClient.clear();await supabase.auth.signOut();await navigate('/auth',{replace:true})}
  async function choose(plan:(typeof demoPlans)[number]) {setSelected(plan);setPaid(false);setOrder(null);if(demo)return;setBusy(true);const {data,error}=await supabase.rpc('create_virtual_order',{p_plan:plan.id});setBusy(false);if(error){toast.error(error.message);setSelected(null);return;}setOrder(data);}
  async function pay(){if(demo){await navigate({to:'/auth'});return;}if(!order)return;setBusy(true);const {error}=await supabase.rpc('pay_virtual_order',{p_order:order});setBusy(false);if(error){toast.error(error.message);return;}setPaid(true);await queryClient.invalidateQueries({queryKey:['safra-account']});toast.success('Pagamento virtual confirmado.');}
  return <div className="app-frame">
