@@ -301,7 +301,7 @@ export function AuthScreen() {
               </div>
             )}
 
-            <Button className="w-full auth-submit" disabled={busy}>
+            <Button type="submit" className="w-full auth-submit" disabled={busy}>
               {busy
                 ? 'Aguarde…'
                 : mode === 'signup'
