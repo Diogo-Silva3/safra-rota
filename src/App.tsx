@@ -1,54 +1,75 @@
-import { Routes, Route, Link } from 'react-router-dom'
-
-function Home() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-      <div className="max-w-7xl mx-auto px-4 py-20">
-        <h1 className="text-5xl font-bold text-gray-900 mb-4">Safra Rota</h1>
-        <p className="text-xl text-gray-700 mb-8">Plataforma de referência de turismo - 12 destinos, 3 planos, sistema de afiliação</p>
-        
-        <div className="grid md:grid-cols-3 gap-4 mb-12">
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-bold mb-2">Plano Bronze</h3>
-            <p className="text-gray-600">Acesso básico com comissões</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-bold mb-2">Plano Prata</h3>
-            <p className="text-gray-600">Mais destinos e comissões altas</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow">
-            <h3 className="text-lg font-bold mb-2">Plano Ouro</h3>
-            <p className="text-gray-600">Acesso total com suporte premium</p>
-          </div>
-        </div>
-
-        <Link to="/auth" className="bg-blue-600 text-white px-8 py-3 rounded-lg text-lg font-bold hover:bg-blue-700">
-          Entrar / Cadastrar
-        </Link>
-      </div>
-    </div>
-  )
-}
-
-function Auth() {
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 flex items-center justify-center">
-      <div className="bg-white p-8 rounded-lg shadow-lg w-96">
-        <h1 className="text-3xl font-bold mb-6 text-center">Autenticação</h1>
-        <p className="text-gray-600 text-center mb-6">Integração com Supabase</p>
-        <Link to="/" className="block text-center bg-gray-600 text-white px-6 py-2 rounded hover:bg-gray-700">
-          Voltar
-        </Link>
-      </div>
-    </div>
-  )
-}
+import { useState, useEffect } from 'react'
+import { Routes, Route, Navigate } from 'react-router-dom'
+import { supabase } from '@/integrations/supabase/client'
+import { AuthScreen } from '@/components/Safra/auth-screen'
+import { Application } from '@/components/Safra/application'
 
 export default function App() {
+  const [user, setUser] = useState(null)
+  const [profile, setProfile] = useState(null)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    // Verificar sessão inicial
+    supabase.auth.getSession().then(({ data: { session } }) => {
+      setUser(session?.user || null)
+      if (session?.user) {
+        loadProfile(session.user.id)
+      } else {
+        setLoading(false)
+      }
+    })
+
+    // Escutar mudanças de autenticação
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange(async (event, session) => {
+      setUser(session?.user || null)
+      if (session?.user) {
+        await loadProfile(session.user.id)
+      } else {
+        setProfile(null)
+        setLoading(false)
+      }
+    })
+
+    return () => subscription?.unsubscribe()
+  }, [])
+
+  async function loadProfile(userId: string) {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single()
+
+      if (error) throw error
+      setProfile(data)
+    } catch (err) {
+      console.error('Erro ao carregar perfil:', err)
+      setProfile(null)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-700">Carregando...</p>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/auth" element={<Auth />} />
+      <Route path="/auth" element={!user ? <AuthScreen /> : <Navigate to="/dashboard" />} />
+      <Route path="/dashboard" element={user && profile ? <Application section="dashboard" account={profile} /> : <Navigate to="/auth" />} />
+      <Route path="/" element={user && profile ? <Navigate to="/dashboard" /> : <Navigate to="/auth" />} />
     </Routes>
   )
 }
