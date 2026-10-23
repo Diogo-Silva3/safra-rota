@@ -56,6 +56,7 @@ export function AuthScreen() {
 
   async function submit(e: FormEvent) {
     e.preventDefault()
+    console.log('[AuthScreen] Submit clicked, mode:', mode)
     setError('')
     setMessage('')
     setBusy(true)
