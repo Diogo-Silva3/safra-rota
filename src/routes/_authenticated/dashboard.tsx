@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-import { Copy, Coins, TrendingUp, Users, Wallet } from "lucide-react";
+import { CalendarDays, Copy, Coins, Sprout, TrendingUp, Users, Wallet } from "lucide-react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,28 @@ export const Route = createFileRoute("/_authenticated/dashboard")({
 });
 
 type Dash = { balance: number; total_yield: number; total_commission: number; active_plans: number; network_size: number };
+
+type MyPlan = {
+  id: string;
+  amount: number;
+  paid_at: string | null;
+  plans: { name: string; daily_yield_pct: number; duration_days: number } | null;
+};
+
+// Dias úteis (seg–sex) decorridos desde o pagamento, limitado à duração do ciclo.
+function businessDaysSince(paidAt: string, max: number) {
+  const d = new Date(paidAt);
+  d.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  let n = 0;
+  while (d < today && n < max) {
+    d.setDate(d.getDate() + 1);
+    const w = d.getDay();
+    if (w !== 0 && w !== 6) n++;
+  }
+  return n;
+}
 
 function Dashboard() {
   const qc = useQueryClient();
@@ -53,6 +75,30 @@ function Dashboard() {
       qc.invalidateQueries();
     },
     onError: (e) => toast.error(e.message),
+  });
+  const myPlans = useQuery({
+    queryKey: ["my-plans"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("purchases")
+        .select("id, amount, paid_at, plans(name, daily_yield_pct, duration_days)")
+        .eq("status", "paid")
+        .order("paid_at", { ascending: false });
+      if (error) throw error;
+      return data as unknown as MyPlan[];
+    },
+  });
+  const yields = useQuery({
+    queryKey: ["plan-yields"],
+    queryFn: async () => {
+      const { data, error } = await supabase.from("transactions").select("purchase_id, amount").eq("type", "yield");
+      if (error) throw error;
+      const m = new Map<string, number>();
+      (data ?? []).forEach((t) => {
+        if (t.purchase_id) m.set(t.purchase_id, (m.get(t.purchase_id) ?? 0) + Number(t.amount));
+      });
+      return m;
+    },
   });
 
   const chart = useMemo(() => {
@@ -96,6 +142,56 @@ function Dashboard() {
           <Stat icon={Coins} label="Comissões" value={brl(d?.total_commission)} />
           <Stat icon={Users} label="Rede (8 níveis)" value={String(d?.network_size ?? 0)} />
           <Stat icon={Wallet} label="Planos ativos" value={String(d?.active_plans ?? 0)} />
+        </div>
+      </div>
+
+      <div className="rounded-2xl border bg-card p-5">
+        <p className="mb-4 flex items-center gap-2 text-sm font-semibold">
+          <Sprout className="h-4 w-4 text-primary" /> Meus planos
+        </p>
+        {(myPlans.data ?? []).length === 0 && (
+          <p className="text-sm text-muted-foreground">Você ainda não tem planos. Escolha uma lavoura em Planos para começar.</p>
+        )}
+        <div className="grid gap-3 sm:grid-cols-2">
+          {(myPlans.data ?? []).map((p) => {
+            const total = p.plans?.duration_days ?? 30;
+            const done = p.paid_at ? businessDaysSince(p.paid_at, total) : 0;
+            const pct = Math.round((done / total) * 100);
+            const ended = done >= total;
+            const earned = yields.data?.get(p.id) ?? 0;
+            const daily = (Number(p.amount) * Number(p.plans?.daily_yield_pct ?? 0)) / 100;
+            return (
+              <div key={p.id} className="rounded-xl border bg-muted/40 p-4 transition hover:shadow-md">
+                <div className="flex items-start justify-between gap-2">
+                  <div>
+                    <p className="font-semibold">{p.plans?.name ?? "Plano"}</p>
+                    <p className="text-xs text-muted-foreground">Investido: {brl(p.amount)}</p>
+                  </div>
+                  <span
+                    className={`rounded-full px-2 py-0.5 text-xs font-medium ${ended ? "bg-muted text-muted-foreground" : "bg-primary/15 text-primary"}`}
+                  >
+                    {ended ? "Concluído" : "Ativo"}
+                  </span>
+                </div>
+                <div className="mt-3 h-2 overflow-hidden rounded-full bg-border">
+                  <div className="h-full rounded-full bg-primary transition-all" style={{ width: `${pct}%` }} />
+                </div>
+                <div className="mt-2 flex justify-between text-xs text-muted-foreground">
+                  <span>
+                    Dia {done} de {total} úteis
+                  </span>
+                  <span>{brl(daily)}/dia útil</span>
+                </div>
+                <div className="mt-3 flex items-center justify-between text-sm">
+                  <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                    <CalendarDays className="h-3.5 w-3.5" />
+                    {p.paid_at ? new Date(p.paid_at).toLocaleDateString("pt-BR") : "—"}
+                  </span>
+                  <span className="font-semibold text-success">Já rendeu {brl(earned)}</span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
 
