@@ -5,3 +5,8 @@ services:
     plan: free
     buildCommand: npm install && npm run build
     startCommand: npx serve dist -s -p $PORT
+    envVars:
+      - key: VITE_SUPABASE_URL
+        value: https://pixelecsswtmdglynsyi.supabase.co
+      - key: VITE_SUPABASE_ANON_KEY
+        value: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpeGVsZWNzc3d0bWRnbHluc3lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzAyODI2NDIsImV4cCI6MTc2MTgxODY0Mn0.dY1KNdyQMg9VKjNLHUqmhvVjRz5yL3GxPNRHHhfJw4I
