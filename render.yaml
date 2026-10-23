@@ -1,16 +1,5 @@
 services:
-  - type: web
+  - type: static
     name: safra-rota
-    env: node
-    plan: free
     buildCommand: npm install && npm run build
-    startCommand: node server.js
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: VITE_SUPABASE_URL
-        sync: false
-      - key: VITE_SUPABASE_ANON_KEY
-        sync: false
-      - key: SUPABASE_SERVICE_ROLE_KEY
-        sync: false
+    staticPublishPath: ./dist
