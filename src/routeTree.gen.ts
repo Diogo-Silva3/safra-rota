@@ -9,9 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as AuthRouteImport } from './routes/auth'
 import { Route as ExtratoRouteImport } from './routes/extrato'
 import { Route as PlanosRouteImport } from './routes/planos'
 import { Route as RedeRouteImport } from './routes/rede'
@@ -21,18 +19,8 @@ import { Route as AuthenticatedMeuExtratoRouteImport } from './routes/_authentic
 import { Route as AuthenticatedMeusPlanosRouteImport } from './routes/_authenticated/meus-planos'
 import { Route as AuthenticatedMinhaRedeRouteImport } from './routes/_authenticated/minha-rede'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AuthRoute = AuthRouteImport.update({
-  id: '/auth',
-  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ExtratoRoute = ExtratoRouteImport.update({
@@ -77,8 +65,7 @@ const AuthenticatedMinhaRedeRoute = AuthenticatedMinhaRedeRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/': typeof AuthenticatedRouteRouteWithChildren
   '/extrato': typeof ExtratoRoute
   '/planos': typeof PlanosRoute
   '/rede': typeof RedeRoute
@@ -89,8 +76,7 @@ export interface FileRoutesByFullPath {
   '/minha-rede': typeof AuthenticatedMinhaRedeRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/auth': typeof AuthRoute
+  '/': typeof AuthenticatedRouteRouteWithChildren
   '/extrato': typeof ExtratoRoute
   '/planos': typeof PlanosRoute
   '/rede': typeof RedeRoute
@@ -102,9 +88,7 @@ export interface FileRoutesByTo {
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/auth': typeof AuthRoute
   '/extrato': typeof ExtratoRoute
   '/planos': typeof PlanosRoute
   '/rede': typeof RedeRoute
@@ -118,7 +102,6 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/auth'
     | '/extrato'
     | '/planos'
     | '/rede'
@@ -130,7 +113,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/auth'
     | '/extrato'
     | '/planos'
     | '/rede'
@@ -141,9 +123,7 @@ export interface FileRouteTypes {
     | '/minha-rede'
   id:
     | '__root__'
-    | '/'
     | '/_authenticated'
-    | '/auth'
     | '/extrato'
     | '/planos'
     | '/rede'
@@ -155,9 +135,7 @@ export interface FileRouteTypes {
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  AuthRoute: typeof AuthRoute
   ExtratoRoute: typeof ExtratoRoute
   PlanosRoute: typeof PlanosRoute
   RedeRoute: typeof RedeRoute
@@ -166,25 +144,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/auth': {
-      id: '/auth'
-      path: '/auth'
-      fullPath: '/auth'
-      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/extrato': {
@@ -264,9 +228,7 @@ const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  AuthRoute: AuthRoute,
   ExtratoRoute: ExtratoRoute,
   PlanosRoute: PlanosRoute,
   RedeRoute: RedeRoute,
@@ -275,13 +237,3 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.ts'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}
