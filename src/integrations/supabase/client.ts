@@ -1,10 +1,12 @@
 import { createClient } from "@supabase/supabase-js";
+import * as mockSupabase from "./mock";
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY;
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-if (!supabaseUrl || !supabaseAnonKey) {
-  throw new Error("Missing Supabase credentials in environment variables");
-}
+// Use mock if Supabase not configured or if explicitly using demo mode
+const useDemo = !supabaseUrl || !supabaseAnonKey || import.meta.env.VITE_USE_DEMO === 'true';
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = useDemo 
+  ? (mockSupabase.supabase as any)
+  : createClient(supabaseUrl, supabaseAnonKey);
