@@ -123,5 +123,3 @@ CREATE POLICY "Users can read own transactions" ON transactions
 -- Plans: everyone can read plans
 CREATE POLICY "Plans are public" ON plans
   FOR SELECT USING (true);
-
-PRINT 'Safra Rota schema created successfully!';
