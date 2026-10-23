@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-dev-runtime-CPV2CgTv.js";import{E as t}from"./index-D1DDipAK.js";var n=e(),r=`C:/Temp/PLATAFORMA NOVA/SAFRA STAYS/src/routes/_authenticated/route.tsx?tsr-split=component`,i=()=>(0,n.jsxDEV)(t,{},void 0,!1,{fileName:r,lineNumber:2,columnNumber:30},void 0);export{i as component};

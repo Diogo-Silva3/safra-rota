@@ -1,1 +1,0 @@
-import{t as e}from"./jsx-dev-runtime-CPV2CgTv.js";import{t}from"./application-Cnz4VDpk.js";var n=e(),r=`C:/Temp/PLATAFORMA NOVA/SAFRA STAYS/src/routes/rede.tsx?tsr-split=component`,i=()=>(0,n.jsxDEV)(t,{section:`network`},void 0,!1,{fileName:r,lineNumber:2,columnNumber:30},void 0);export{i as component};

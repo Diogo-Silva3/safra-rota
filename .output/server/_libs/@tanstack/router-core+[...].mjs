@@ -1,4 +1,4 @@
-import { A as createInlineCssStyleAsset, B as decodePath, C as createStream, E as isStream, F as waitForReason, I as _getRenderedMatches, M as getStylesheetHref, R as invariant, S as createPlugin, U as dehydrateSsrMatchId, k as createInlineCssPlaceholderAsset, l as createHydrationScripts, q as rootRouteId, u as GLOBAL_TSR, w as crossSerializeStream, z as createSieveCache } from "./react-router+[...].mjs";
+import { C as createStream, F as _getRenderedMatches, G as rootRouteId, H as dehydrateSsrMatchId, L as invariant, O as createInlineCssPlaceholderAsset, P as waitForReason, R as createSieveCache, S as createPlugin, j as getStylesheetHref, k as createInlineCssStyleAsset, l as createHydrationScripts, u as GLOBAL_TSR, w as crossSerializeStream, z as decodePath } from "./react-router+[...].mjs";
 //#region node_modules/@tanstack/router-core/dist/esm/ssr/serializer/transformer.js
 /**
 * Create a strongly-typed serialization adapter for SSR hydration.
@@ -61,66 +61,6 @@ var RawStream = class {
 		this.hint = options?.hint ?? "binary";
 	}
 };
-//#endregion
-//#region node_modules/cookie-es/dist/index.mjs
-function splitSetCookieString(cookiesString) {
-	if (Array.isArray(cookiesString)) return cookiesString.flatMap((c) => splitSetCookieString(c));
-	if (typeof cookiesString !== "string") return [];
-	const cookiesStrings = [];
-	let pos = 0;
-	let start;
-	let ch;
-	let lastComma;
-	let nextStart;
-	let cookiesSeparatorFound;
-	const skipWhitespace = () => {
-		while (pos < cookiesString.length && /\s/.test(cookiesString.charAt(pos))) pos += 1;
-		return pos < cookiesString.length;
-	};
-	const notSpecialChar = () => {
-		ch = cookiesString.charAt(pos);
-		return ch !== "=" && ch !== ";" && ch !== ",";
-	};
-	while (pos < cookiesString.length) {
-		start = pos;
-		cookiesSeparatorFound = false;
-		while (skipWhitespace()) {
-			ch = cookiesString.charAt(pos);
-			if (ch === ",") {
-				lastComma = pos;
-				pos += 1;
-				skipWhitespace();
-				nextStart = pos;
-				while (pos < cookiesString.length && notSpecialChar()) pos += 1;
-				if (pos < cookiesString.length && cookiesString.charAt(pos) === "=") {
-					cookiesSeparatorFound = true;
-					pos = nextStart;
-					cookiesStrings.push(cookiesString.slice(start, lastComma));
-					start = pos;
-				} else pos = lastComma + 1;
-			} else pos += 1;
-		}
-		if (!cookiesSeparatorFound || pos >= cookiesString.length) cookiesStrings.push(cookiesString.slice(start));
-	}
-	return cookiesStrings;
-}
-//#endregion
-//#region node_modules/@tanstack/router-core/dist/esm/ssr/headers.js
-function toHeadersInstance(init) {
-	if (init instanceof Headers) return init;
-	else if (Array.isArray(init)) return new Headers(init);
-	else if (typeof init === "object") return new Headers(init);
-	else return null;
-}
-function mergeHeaders(...headers) {
-	return headers.reduce((acc, header) => {
-		const headersInstance = toHeadersInstance(header);
-		if (!headersInstance) return acc;
-		for (const [key, value] of headersInstance.entries()) if (key === "set-cookie") splitSetCookieString(value).forEach((cookie) => acc.append("set-cookie", cookie));
-		else acc.set(key, value);
-		return acc;
-	}, new Headers());
-}
 //#endregion
 //#region node_modules/@tanstack/router-core/dist/esm/ssr/serializer/ShallowErrorPlugin.js
 /**
@@ -307,7 +247,7 @@ var RawStreamJSONDeserializePlugin = /* @__PURE__ */ createPlugin({
 	}
 });
 //#endregion
-//#region node_modules/seroval-plugins/dist/web-CDQeyEaf.js
+//#region node_modules/seroval-plugins/dist/web.js
 var READABLE_STREAM_FACTORY = {};
 var READABLE_STREAM_FACTORY_CONSTRUCTOR = (stream) => new ReadableStream({ start(controller) {
 	stream.on({
@@ -349,59 +289,82 @@ var ReadableStreamFactoryPlugin = /* @__PURE__ */ createPlugin({
 		return READABLE_STREAM_FACTORY;
 	}
 });
-async function drainStream(stream, reader) {
-	try {
-		while (true) {
-			const result = await reader.read();
-			if (result.done) {
-				stream.return(result.value);
+function toAsyncIterable(value) {
+	return { [Symbol.asyncIterator]() {
+		const reader = value.getReader();
+		let active = true;
+		let reading = false;
+		const release = () => {
+			try {
 				reader.releaseLock();
-				break;
+			} catch {}
+		};
+		return {
+			async next() {
+				if (!active) return {
+					done: true,
+					value: void 0
+				};
+				reading = true;
+				let result;
+				try {
+					result = await reader.read();
+				} catch (error) {
+					reading = false;
+					release();
+					if (!active) return {
+						done: true,
+						value: void 0
+					};
+					active = false;
+					throw error;
+				}
+				reading = false;
+				if (!active || result.done) {
+					active = false;
+					release();
+					return {
+						done: true,
+						value: void 0
+					};
+				}
+				return result;
+			},
+			return(reason) {
+				if (active) {
+					active = false;
+					try {
+						reader.cancel(reason).catch(() => {});
+					} catch {}
+					if (!reading) release();
+				}
+				return Promise.resolve({
+					done: true,
+					value: void 0
+				});
 			}
-			stream.next(result.value);
-		}
-	} catch (error) {
-		reader.releaseLock();
-		stream.throw(error);
-	}
-}
-function cleanupStream(reader) {
-	reader.cancel().catch(() => {});
-	reader.releaseLock();
-}
-function toStream(value) {
-	const stream = createStream();
-	const reader = value.getReader();
-	const cleanup = cleanupStream.bind(null, reader);
-	drainStream(stream, reader).catch(cleanup);
-	return [stream, cleanup];
+		};
+	} };
 }
 var ReadableStreamPlugin = /* @__PURE__ */ createPlugin({
 	tag: "seroval/plugins/web/ReadableStream",
 	extends: [ReadableStreamFactoryPlugin],
+	skipPlainObjects: true,
 	test(value) {
 		if (typeof ReadableStream === "undefined") return false;
 		return value instanceof ReadableStream;
 	},
 	parse: {
-		sync(_value, ctx) {
-			return {
-				factory: ctx.parse(READABLE_STREAM_FACTORY),
-				stream: ctx.parse(createStream())
-			};
-		},
 		async async(value, ctx) {
 			return {
 				factory: await ctx.parse(READABLE_STREAM_FACTORY),
-				stream: await ctx.parse(toStream(value)[0])
+				stream: await ctx.parseStreamSource(toAsyncIterable(value))
 			};
 		},
 		stream(value, ctx) {
-			const [stream, cleanup] = toStream(value);
-			ctx.addCleanup(cleanup);
 			return {
 				factory: ctx.parse(READABLE_STREAM_FACTORY),
-				stream: ctx.parse(stream)
+				stream: ctx.parseStreamSource(toAsyncIterable(value))
 			};
 		}
 	},
@@ -409,9 +372,7 @@ var ReadableStreamPlugin = /* @__PURE__ */ createPlugin({
 		return "(" + ctx.serialize(node.factory) + ")(" + ctx.serialize(node.stream) + ")";
 	},
 	deserialize(node, ctx) {
-		const stream = ctx.deserialize(node.stream);
-		if (!stream || typeof stream !== "object" || !isStream(stream)) throw new Error("Expected a stream source.");
-		return READABLE_STREAM_FACTORY_CONSTRUCTOR(stream);
+		return READABLE_STREAM_FACTORY_CONSTRUCTOR(ctx.deserialize(node.stream));
 	}
 });
 //#endregion
@@ -869,4 +830,64 @@ function getNormalizedURL(url, base) {
 	};
 }
 //#endregion
-export { mergeHeaders as a, defaultSerovalDeserializerPlugins as i, getNormalizedURL as n, makeSerovalPlugin as o, createRawStreamRPCPlugin as r, createSerializationAdapter as s, attachRouterServerSsrUtils as t };
+//#region node_modules/cookie-es/dist/index.mjs
+function splitSetCookieString(cookiesString) {
+	if (Array.isArray(cookiesString)) return cookiesString.flatMap((c) => splitSetCookieString(c));
+	if (typeof cookiesString !== "string") return [];
+	const cookiesStrings = [];
+	let pos = 0;
+	let start;
+	let ch;
+	let lastComma;
+	let nextStart;
+	let cookiesSeparatorFound;
+	const skipWhitespace = () => {
+		while (pos < cookiesString.length && /\s/.test(cookiesString.charAt(pos))) pos += 1;
+		return pos < cookiesString.length;
+	};
+	const notSpecialChar = () => {
+		ch = cookiesString.charAt(pos);
+		return ch !== "=" && ch !== ";" && ch !== ",";
+	};
+	while (pos < cookiesString.length) {
+		start = pos;
+		cookiesSeparatorFound = false;
+		while (skipWhitespace()) {
+			ch = cookiesString.charAt(pos);
+			if (ch === ",") {
+				lastComma = pos;
+				pos += 1;
+				skipWhitespace();
+				nextStart = pos;
+				while (pos < cookiesString.length && notSpecialChar()) pos += 1;
+				if (pos < cookiesString.length && cookiesString.charAt(pos) === "=") {
+					cookiesSeparatorFound = true;
+					pos = nextStart;
+					cookiesStrings.push(cookiesString.slice(start, lastComma));
+					start = pos;
+				} else pos = lastComma + 1;
+			} else pos += 1;
+		}
+		if (!cookiesSeparatorFound || pos >= cookiesString.length) cookiesStrings.push(cookiesString.slice(start));
+	}
+	return cookiesStrings;
+}
+//#endregion
+//#region node_modules/@tanstack/router-core/dist/esm/ssr/headers.js
+function toHeadersInstance(init) {
+	if (init instanceof Headers) return init;
+	else if (Array.isArray(init)) return new Headers(init);
+	else if (typeof init === "object") return new Headers(init);
+	else return null;
+}
+function mergeHeaders(...headers) {
+	return headers.reduce((acc, header) => {
+		const headersInstance = toHeadersInstance(header);
+		if (!headersInstance) return acc;
+		for (const [key, value] of headersInstance.entries()) if (key === "set-cookie") splitSetCookieString(value).forEach((cookie) => acc.append("set-cookie", cookie));
+		else acc.set(key, value);
+		return acc;
+	}, new Headers());
+}
+//#endregion
+export { defaultSerovalDeserializerPlugins as a, createRawStreamRPCPlugin as i, attachRouterServerSsrUtils as n, makeSerovalPlugin as o, getNormalizedURL as r, createSerializationAdapter as s, mergeHeaders as t };

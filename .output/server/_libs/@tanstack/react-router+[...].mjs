@@ -1,8 +1,6 @@
 import { i as __toESM, t as __commonJSMin } from "../../_runtime.mjs";
-import { s as require_react_dom } from "../@radix-ui/react-dialog+[...].mjs";
-import { n as require_react } from "../@radix-ui/react-compose-refs+[...].mjs";
+import { l as require_jsx_runtime, s as require_react_dom, u as require_react } from "../@radix-ui/react-accordion+[...].mjs";
 import { i as parseHref, r as normalizeProtocolRelative } from "../tanstack__history.mjs";
-import { n as require_jsx_runtime } from "../radix-ui__react-context+react.mjs";
 import { Buffer } from "node:buffer";
 import { PassThrough, Readable } from "node:stream";
 //#region node_modules/@tanstack/router-core/dist/esm/not-found.js
@@ -48,10 +46,6 @@ function redirect(opts) {
 /** Check whether a value is a TanStack Router redirect Response. */
 function isRedirect(obj) {
 	return obj instanceof Response && !!obj.options;
-}
-/** Parse a serialized redirect object back into a redirect Response. */
-function parseRedirect(obj) {
-	if (obj !== null && typeof obj === "object" && obj.isSerializedRedirect) return redirect(obj);
 }
 //#endregion
 //#region node_modules/@tanstack/router-core/dist/esm/ssr/ssr-match-id.js
@@ -4435,6 +4429,20 @@ var Stream = class {
 			}
 		};
 	}
+	/**
+	* Returns the events of a stream that has ended, without subscribing, so a
+	* live receiver is not consumed. The last value is the `return` or `throw`
+	* value. Returns `undefined` while the stream is open, or when a live
+	* receiver was already consumed and has no events left.
+	* @internal
+	*/
+	endedEvents() {
+		if (this.alive || this.live > 1) return void 0;
+		return {
+			values: this.buffer.slice(),
+			success: this.success
+		};
+	}
 	next(value) {
 		if (this.alive) this.flush(value, "next");
 	}
@@ -5049,8 +5057,10 @@ function guardIndexedValue(ctx, id) {
 function isThennable(value) {
 	return !!value && (typeof value === "object" || typeof value === "function") && "then" in value && typeof value.then === "function";
 }
+var ignoreRejection = () => {};
 function assignIndexedValue$1(ctx, id, value) {
 	guardIndexedValue(ctx.base, id);
+	if (ctx.base.pending && value instanceof Promise) value.catch(ignoreRejection);
 	const marked = ctx.marked;
 	if (!marked || marked.has(id)) ctx.base.refs.set(id, value);
 	return value;
@@ -6080,9 +6090,10 @@ function parseProperties(ctx, depth, properties) {
 	};
 }
 function parseAsyncIterable(ctx, depth, current) {
+	if (ctx.type !== 2) throw new SerovalUnsupportedTypeError(current);
 	const id = createIndexForValue(ctx.base, {});
 	const result = createStreamConstructorNode(id, parseSpecialReference(ctx.base, 4), []);
-	if (ctx.type === 2) ctx.state.iterable(ctx, depth, id, current);
+	ctx.state.iterable(ctx, depth, id, current);
 	return result;
 }
 function parsePlainObject(ctx, depth, id, current, empty) {
@@ -6117,15 +6128,34 @@ function parseSet(ctx, depth, id, current) {
 	for (const item of current.keys()) items[i++] = parseSOS(ctx, depth, item);
 	return createSetNode(id, items);
 }
+/**
+* Sends the events of a stream that has ended, so the copy gets all of them.
+* A stream that is still open throws, because the other sync modes cannot
+* send its later events.
+*/
+function parseEndedStream(ctx, depth, id, current) {
+	const events = current.endedEvents();
+	if (!events) throw new SerovalUnsupportedTypeError(current);
+	const values = events.values;
+	const last = values.length - 1;
+	const sequence = new Array(values.length);
+	if (last >= 0) markParserRef(ctx.base, id);
+	for (let i = 0; i <= last; i++) sequence[i] = createStreamEventNode(i < last ? 32 : events.success ? 34 : 33, id, parseSOS(ctx, depth, values[i]));
+	return sequence;
+}
 function parseStream(ctx, depth, id, current) {
-	const result = createStreamConstructorNode(id, parseSpecialReference(ctx.base, 4), []);
-	if (ctx.type === 2) ctx.state.stream(ctx, depth, id, current);
-	return result;
+	const reference = parseSpecialReference(ctx.base, 4);
+	if (ctx.type === 2) {
+		const result = createStreamConstructorNode(id, reference, []);
+		ctx.state.stream(ctx, depth, id, current);
+		return result;
+	}
+	return createStreamConstructorNode(id, reference, parseEndedStream(ctx, depth, id, current));
 }
 function parseLiveStream(ctx, depth, id, current) {
-	const stream = ctx.type === 2;
-	const result = createStreamConstructorNode(id, parseSpecialReference(ctx.base, 4), [], stream ? 1 : void 0);
-	if (stream) ctx.state.live(ctx, depth, id, current);
+	if (ctx.type !== 2) throw new SerovalUnsupportedTypeError(current);
+	const result = createStreamConstructorNode(id, parseSpecialReference(ctx.base, 4), [], 1);
+	ctx.state.live(ctx, depth, id, current);
 	return result;
 }
 function parsePromise(ctx, depth, id, current) {
@@ -17950,4 +17980,4 @@ var renderRouterToStream = async ({ request, router, responseHeaders, children }
 	}
 };
 //#endregion
-export { createInlineCssStyleAsset as A, decodePath as B, createStream as C, toCrossJSONAsync as D, isStream as E, waitForReason as F, parseRedirect as G, isPromise as H, _getRenderedMatches as I, isNotFound as J, redirect as K, executeRewriteInput as L, getStylesheetHref as M, resolveManifestAssetLink as N, toCrossJSONStream as O, resolveManifestCssLink as P, invariant as R, createPlugin as S, fromJSON as T, dehydrateSsrMatchId as U, isDangerousProtocol as V, isRedirect as W, createFileRoute as _, isSsrResponse as a, useNavigate as b, stripSsrResponseBody as c, Scripts as d, HeadContent as f, lazyRouteComponent as g, Outlet as h, disposeSsrResponse as i, getScriptPreloadAttrs as j, createInlineCssPlaceholderAsset as k, createHydrationScripts as l, createRouter as m, bindSsrResponseToRequest as n, normalizeSsrResponse as o, RouterProvider as p, rootRouteId as q, defineHandlerCallback as r, replaceSsrResponse as s, renderRouterToStream as t, GLOBAL_TSR as u, createRootRouteWithContext as v, crossSerializeStream as w, useRouter as x, Link as y, createSieveCache as z };
+export { getScriptPreloadAttrs as A, isDangerousProtocol as B, createStream as C, toCrossJSONStream as D, toCrossJSONAsync as E, _getRenderedMatches as F, rootRouteId as G, dehydrateSsrMatchId as H, executeRewriteInput as I, isNotFound as K, invariant as L, resolveManifestAssetLink as M, resolveManifestCssLink as N, createInlineCssPlaceholderAsset as O, waitForReason as P, createSieveCache as R, createPlugin as S, fromJSON as T, isRedirect as U, isPromise as V, redirect as W, createFileRoute as _, isSsrResponse as a, useNavigate as b, stripSsrResponseBody as c, Scripts as d, HeadContent as f, lazyRouteComponent as g, Outlet as h, disposeSsrResponse as i, getStylesheetHref as j, createInlineCssStyleAsset as k, createHydrationScripts as l, createRouter as m, bindSsrResponseToRequest as n, normalizeSsrResponse as o, RouterProvider as p, defineHandlerCallback as r, replaceSsrResponse as s, renderRouterToStream as t, GLOBAL_TSR as u, createRootRouteWithContext as v, crossSerializeStream as w, useRouter as x, Link as y, decodePath as z };

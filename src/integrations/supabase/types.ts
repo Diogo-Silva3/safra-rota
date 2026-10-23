@@ -14,99 +14,57 @@ export type Database = {
   }
   public: {
     Tables: {
-      orders: {
-        Row: {
-          created_at: string
-          id: string
-          paid_at: string | null
-          plan_id: string
-          price_cents: number
-          status: string
-          user_id: string
-        }
-        Insert: {
-          created_at?: string
-          id?: string
-          paid_at?: string | null
-          plan_id: string
-          price_cents: number
-          status?: string
-          user_id: string
-        }
-        Update: {
-          created_at?: string
-          id?: string
-          paid_at?: string | null
-          plan_id?: string
-          price_cents?: number
-          status?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "orders_plan_id_fkey"
-            columns: ["plan_id"]
-            isOneToOne: false
-            referencedRelation: "plans"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "orders_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       plans: {
         Row: {
-          category: string
-          destination: string
+          daily_yield_pct: number
+          description: string
+          duration_days: number
           id: string
           name: string
-          price_cents: number
+          price: number
+          sort: number
         }
         Insert: {
-          category: string
-          destination: string
-          id: string
+          daily_yield_pct: number
+          description?: string
+          duration_days: number
+          id?: string
           name: string
-          price_cents: number
+          price: number
+          sort?: number
         }
         Update: {
-          category?: string
-          destination?: string
+          daily_yield_pct?: number
+          description?: string
+          duration_days?: number
           id?: string
           name?: string
-          price_cents?: number
+          price?: number
+          sort?: number
         }
         Relationships: []
       }
       profiles: {
         Row: {
           created_at: string
-          display_name: string
+          full_name: string
           id: string
-          invite_code: string
+          referral_code: string
           referrer_id: string | null
-          registered: boolean
         }
         Insert: {
           created_at?: string
-          display_name?: string
+          full_name?: string
           id: string
-          invite_code?: string
+          referral_code: string
           referrer_id?: string | null
-          registered?: boolean
         }
         Update: {
           created_at?: string
-          display_name?: string
+          full_name?: string
           id?: string
-          invite_code?: string
+          referral_code?: string
           referrer_id?: string | null
-          registered?: boolean
         }
         Relationships: [
           {
@@ -118,40 +76,104 @@ export type Database = {
           },
         ]
       }
-      transactions: {
+      purchases: {
         Row: {
-          amount_cents: number
+          amount: number
           created_at: string
-          description: string
           id: string
-          kind: string
-          order_id: string | null
+          last_yield_date: string | null
+          paid_at: string | null
+          pix_code: string
+          plan_id: string
+          status: string
           user_id: string
         }
         Insert: {
-          amount_cents: number
+          amount: number
           created_at?: string
-          description: string
           id?: string
-          kind: string
-          order_id?: string | null
+          last_yield_date?: string | null
+          paid_at?: string | null
+          pix_code: string
+          plan_id: string
+          status?: string
           user_id: string
         }
         Update: {
-          amount_cents?: number
+          amount?: number
           created_at?: string
-          description?: string
           id?: string
-          kind?: string
-          order_id?: string | null
+          last_yield_date?: string | null
+          paid_at?: string | null
+          pix_code?: string
+          plan_id?: string
+          status?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "transactions_order_id_fkey"
-            columns: ["order_id"]
-            isOneToOne: true
-            referencedRelation: "orders"
+            foreignKeyName: "purchases_plan_id_fkey"
+            columns: ["plan_id"]
+            isOneToOne: false
+            referencedRelation: "plans"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "purchases_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          description: string
+          id: string
+          level: number | null
+          purchase_id: string | null
+          source_user_id: string | null
+          type: string
+          user_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          description?: string
+          id?: string
+          level?: number | null
+          purchase_id?: string | null
+          source_user_id?: string | null
+          type: string
+          user_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          description?: string
+          id?: string
+          level?: number | null
+          purchase_id?: string | null
+          source_user_id?: string | null
+          type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "transactions_purchase_id_fkey"
+            columns: ["purchase_id"]
+            isOneToOne: false
+            referencedRelation: "purchases"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "transactions_source_user_id_fkey"
+            columns: ["source_user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
           {
@@ -163,24 +185,39 @@ export type Database = {
           },
         ]
       }
-      wallets: {
+      withdrawals: {
         Row: {
-          balance_cents: number
+          amount: number
+          created_at: string
+          id: string
+          pix_key: string
+          processed_at: string | null
+          status: string
           user_id: string
         }
         Insert: {
-          balance_cents?: number
+          amount: number
+          created_at?: string
+          id?: string
+          pix_key: string
+          processed_at?: string | null
+          status?: string
           user_id: string
         }
         Update: {
-          balance_cents?: number
+          amount?: number
+          created_at?: string
+          id?: string
+          pix_key?: string
+          processed_at?: string | null
+          status?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "wallets_user_id_fkey"
+            foreignKeyName: "withdrawals_user_id_fkey"
             columns: ["user_id"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
@@ -191,23 +228,30 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      create_virtual_order: { Args: { p_plan: string }; Returns: string }
-      finish_registration: {
-        Args: { p_inviter: string; p_name: string }
-        Returns: undefined
-      }
-      my_referral_tree: {
+      check_referral_code: { Args: { p_code: string }; Returns: string }
+      collect_yields: { Args: never; Returns: number }
+      create_purchase: { Args: { p_plan_id: string }; Returns: string }
+      get_dashboard: { Args: never; Returns: Json }
+      get_network: {
         Args: never
         Returns: {
+          active_plans: number
           created_at: string
-          display_name: string
+          full_name: string
           id: string
-          invite_code: string
           level: number
+          referral_code: string
           referrer_id: string
         }[]
       }
-      pay_virtual_order: { Args: { p_order: string }; Returns: undefined }
+      request_withdrawal: {
+        Args: { p_amount: number; p_pix_key: string }
+        Returns: string
+      }
+      simulate_pix_payment: {
+        Args: { p_purchase_id: string }
+        Returns: undefined
+      }
     }
     Enums: {
       [_ in never]: never

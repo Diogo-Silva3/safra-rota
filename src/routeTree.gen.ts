@@ -9,38 +9,27 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
-import { Route as ExtratoRouteImport } from './routes/extrato'
-import { Route as PlanosRouteImport } from './routes/planos'
-import { Route as RedeRouteImport } from './routes/rede'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
+import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated/dashboard'
-import { Route as AuthenticatedMeuExtratoRouteImport } from './routes/_authenticated/meu-extrato'
-import { Route as AuthenticatedMeusPlanosRouteImport } from './routes/_authenticated/meus-planos'
-import { Route as AuthenticatedMinhaRedeRouteImport } from './routes/_authenticated/minha-rede'
+import { Route as AuthenticatedPlanosRouteImport } from './routes/_authenticated/planos'
+import { Route as AuthenticatedRedeRouteImport } from './routes/_authenticated/rede'
+import { Route as AuthenticatedSaqueRouteImport } from './routes/_authenticated/saque'
+import { Route as AuthenticatedPixIdRouteImport } from './routes/_authenticated/pix.$id'
 
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ExtratoRoute = ExtratoRouteImport.update({
-  id: '/extrato',
-  path: '/extrato',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PlanosRoute = PlanosRouteImport.update({
-  id: '/planos',
-  path: '/planos',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RedeRoute = RedeRouteImport.update({
-  id: '/rede',
-  path: '/rede',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
+const AuthRoute = AuthRouteImport.update({
+  id: '/auth',
+  path: '/auth',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
@@ -48,102 +37,89 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedMeuExtratoRoute = AuthenticatedMeuExtratoRouteImport.update({
-  id: '/meu-extrato',
-  path: '/meu-extrato',
+const AuthenticatedPlanosRoute = AuthenticatedPlanosRouteImport.update({
+  id: '/planos',
+  path: '/planos',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedMeusPlanosRoute = AuthenticatedMeusPlanosRouteImport.update({
-  id: '/meus-planos',
-  path: '/meus-planos',
+const AuthenticatedRedeRoute = AuthenticatedRedeRouteImport.update({
+  id: '/rede',
+  path: '/rede',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
-const AuthenticatedMinhaRedeRoute = AuthenticatedMinhaRedeRouteImport.update({
-  id: '/minha-rede',
-  path: '/minha-rede',
+const AuthenticatedSaqueRoute = AuthenticatedSaqueRouteImport.update({
+  id: '/saque',
+  path: '/saque',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedPixIdRoute = AuthenticatedPixIdRouteImport.update({
+  id: '/pix/$id',
+  path: '/pix/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof AuthenticatedRouteRouteWithChildren
-  '/extrato': typeof ExtratoRoute
-  '/planos': typeof PlanosRoute
-  '/rede': typeof RedeRoute
-  '/reset-password': typeof ResetPasswordRoute
+  '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/meu-extrato': typeof AuthenticatedMeuExtratoRoute
-  '/meus-planos': typeof AuthenticatedMeusPlanosRoute
-  '/minha-rede': typeof AuthenticatedMinhaRedeRoute
+  '/planos': typeof AuthenticatedPlanosRoute
+  '/rede': typeof AuthenticatedRedeRoute
+  '/saque': typeof AuthenticatedSaqueRoute
+  '/pix/$id': typeof AuthenticatedPixIdRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof AuthenticatedRouteRouteWithChildren
-  '/extrato': typeof ExtratoRoute
-  '/planos': typeof PlanosRoute
-  '/rede': typeof RedeRoute
-  '/reset-password': typeof ResetPasswordRoute
+  '/': typeof IndexRoute
+  '/auth': typeof AuthRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
-  '/meu-extrato': typeof AuthenticatedMeuExtratoRoute
-  '/meus-planos': typeof AuthenticatedMeusPlanosRoute
-  '/minha-rede': typeof AuthenticatedMinhaRedeRoute
+  '/planos': typeof AuthenticatedPlanosRoute
+  '/rede': typeof AuthenticatedRedeRoute
+  '/saque': typeof AuthenticatedSaqueRoute
+  '/pix/$id': typeof AuthenticatedPixIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/extrato': typeof ExtratoRoute
-  '/planos': typeof PlanosRoute
-  '/rede': typeof RedeRoute
-  '/reset-password': typeof ResetPasswordRoute
+  '/auth': typeof AuthRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
-  '/_authenticated/meu-extrato': typeof AuthenticatedMeuExtratoRoute
-  '/_authenticated/meus-planos': typeof AuthenticatedMeusPlanosRoute
-  '/_authenticated/minha-rede': typeof AuthenticatedMinhaRedeRoute
+  '/_authenticated/planos': typeof AuthenticatedPlanosRoute
+  '/_authenticated/rede': typeof AuthenticatedRedeRoute
+  '/_authenticated/saque': typeof AuthenticatedSaqueRoute
+  '/_authenticated/pix/$id': typeof AuthenticatedPixIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/extrato'
-    | '/planos'
-    | '/rede'
-    | '/reset-password'
-    | '/dashboard'
-    | '/meu-extrato'
-    | '/meus-planos'
-    | '/minha-rede'
+    '/' | '/auth' | '/dashboard' | '/planos' | '/rede' | '/saque' | '/pix/$id'
   fileRoutesByTo: FileRoutesByTo
-  to:
-    | '/'
-    | '/extrato'
-    | '/planos'
-    | '/rede'
-    | '/reset-password'
-    | '/dashboard'
-    | '/meu-extrato'
-    | '/meus-planos'
-    | '/minha-rede'
+  to: '/' | '/auth' | '/dashboard' | '/planos' | '/rede' | '/saque' | '/pix/$id'
   id:
     | '__root__'
+    | '/'
     | '/_authenticated'
-    | '/extrato'
-    | '/planos'
-    | '/rede'
-    | '/reset-password'
+    | '/auth'
     | '/_authenticated/dashboard'
-    | '/_authenticated/meu-extrato'
-    | '/_authenticated/meus-planos'
-    | '/_authenticated/minha-rede'
+    | '/_authenticated/planos'
+    | '/_authenticated/rede'
+    | '/_authenticated/saque'
+    | '/_authenticated/pix/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
+  IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  ExtratoRoute: typeof ExtratoRoute
-  PlanosRoute: typeof PlanosRoute
-  RedeRoute: typeof RedeRoute
-  ResetPasswordRoute: typeof ResetPasswordRoute
+  AuthRoute: typeof AuthRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated': {
       id: '/_authenticated'
       path: ''
@@ -151,32 +127,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/extrato': {
-      id: '/extrato'
-      path: '/extrato'
-      fullPath: '/extrato'
-      preLoaderRoute: typeof ExtratoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/planos': {
-      id: '/planos'
-      path: '/planos'
-      fullPath: '/planos'
-      preLoaderRoute: typeof PlanosRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/rede': {
-      id: '/rede'
-      path: '/rede'
-      fullPath: '/rede'
-      preLoaderRoute: typeof RedeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
+    '/auth': {
+      id: '/auth'
+      path: '/auth'
+      fullPath: '/auth'
+      preLoaderRoute: typeof AuthRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/_authenticated/dashboard': {
@@ -186,25 +141,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/meu-extrato': {
-      id: '/_authenticated/meu-extrato'
-      path: '/meu-extrato'
-      fullPath: '/meu-extrato'
-      preLoaderRoute: typeof AuthenticatedMeuExtratoRouteImport
+    '/_authenticated/planos': {
+      id: '/_authenticated/planos'
+      path: '/planos'
+      fullPath: '/planos'
+      preLoaderRoute: typeof AuthenticatedPlanosRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/meus-planos': {
-      id: '/_authenticated/meus-planos'
-      path: '/meus-planos'
-      fullPath: '/meus-planos'
-      preLoaderRoute: typeof AuthenticatedMeusPlanosRouteImport
+    '/_authenticated/rede': {
+      id: '/_authenticated/rede'
+      path: '/rede'
+      fullPath: '/rede'
+      preLoaderRoute: typeof AuthenticatedRedeRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
-    '/_authenticated/minha-rede': {
-      id: '/_authenticated/minha-rede'
-      path: '/minha-rede'
-      fullPath: '/minha-rede'
-      preLoaderRoute: typeof AuthenticatedMinhaRedeRouteImport
+    '/_authenticated/saque': {
+      id: '/_authenticated/saque'
+      path: '/saque'
+      fullPath: '/saque'
+      preLoaderRoute: typeof AuthenticatedSaqueRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pix/$id': {
+      id: '/_authenticated/pix/$id'
+      path: '/pix/$id'
+      fullPath: '/pix/$id'
+      preLoaderRoute: typeof AuthenticatedPixIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
   }
@@ -212,28 +174,38 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
-  AuthenticatedMeuExtratoRoute: typeof AuthenticatedMeuExtratoRoute
-  AuthenticatedMeusPlanosRoute: typeof AuthenticatedMeusPlanosRoute
-  AuthenticatedMinhaRedeRoute: typeof AuthenticatedMinhaRedeRoute
+  AuthenticatedPlanosRoute: typeof AuthenticatedPlanosRoute
+  AuthenticatedRedeRoute: typeof AuthenticatedRedeRoute
+  AuthenticatedSaqueRoute: typeof AuthenticatedSaqueRoute
+  AuthenticatedPixIdRoute: typeof AuthenticatedPixIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
-  AuthenticatedMeuExtratoRoute: AuthenticatedMeuExtratoRoute,
-  AuthenticatedMeusPlanosRoute: AuthenticatedMeusPlanosRoute,
-  AuthenticatedMinhaRedeRoute: AuthenticatedMinhaRedeRoute,
+  AuthenticatedPlanosRoute: AuthenticatedPlanosRoute,
+  AuthenticatedRedeRoute: AuthenticatedRedeRoute,
+  AuthenticatedSaqueRoute: AuthenticatedSaqueRoute,
+  AuthenticatedPixIdRoute: AuthenticatedPixIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
 const rootRouteChildren: RootRouteChildren = {
+  IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  ExtratoRoute: ExtratoRoute,
-  PlanosRoute: PlanosRoute,
-  RedeRoute: RedeRoute,
-  ResetPasswordRoute: ResetPasswordRoute,
+  AuthRoute: AuthRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
