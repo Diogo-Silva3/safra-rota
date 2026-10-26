@@ -1,31 +1,27 @@
 import express from 'express';
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
+import path from 'path';
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Build output is in .output/public at project root
-// server.mjs is at /opt/render/project/server.mjs
-// So __dirname = /opt/render/project and we go to .output/public
-const publicDir = join(__dirname, '.output', 'public');
+// Use process.cwd() to get ACTUAL working directory on Render
+// On Render: process.cwd() = /opt/render/project
+const projectRoot = process.cwd();
+const publicDir = path.join(projectRoot, '.output', 'public');
 
-console.log('[server] __dirname:', __dirname);
-console.log('[server] publicDir:', publicDir);
+console.log('[server] project root:', projectRoot);
+console.log('[server] serving from:', publicDir);
 
 app.use(express.static(publicDir));
 
-// SPA fallback
+// SPA fallback - serve index.html for all routes
 app.get('*', (req, res) => {
-  const indexFile = join(publicDir, 'index.html');
-  console.log('[server] Serving index.html:', indexFile);
-  res.sendFile(indexFile, (err) => {
+  const indexPath = path.join(publicDir, 'index.html');
+  console.log('[server] GET', req.path, '-> serving', indexPath);
+  res.sendFile(indexPath, (err) => {
     if (err) {
       console.error('[server] Error:', err.message);
-      res.status(404).send('404 - Not Found');
+      res.status(404).send('404 Not Found');
     }
   });
 });
