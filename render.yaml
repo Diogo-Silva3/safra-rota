@@ -3,7 +3,7 @@ services:
     name: safra-rota
     env: node
     plan: free
-    buildCommand: npm install && npm run build
+    buildCommand: rm -rf .output src/.output node_modules && npm install && npm run build
     startCommand: npm start
     envVars:
       - key: VITE_SUPABASE_URL
