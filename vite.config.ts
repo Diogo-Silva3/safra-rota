@@ -1,7 +1,6 @@
-// Using simple Vite + Express setup (not TanStack Start)
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
 import path from 'path';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   plugins: [react()],
@@ -9,10 +8,10 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src'),
     },
-    tsconfigPaths: true,
   },
   build: {
     outDir: 'dist',
     emptyOutDir: true,
+    minify: 'esbuild',
   },
 });
