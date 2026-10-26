@@ -16,9 +16,9 @@ export const Route = createFileRoute("/auth")({
   }),
   head: () => ({
     meta: [
-      { title: "Entrar ou cadastrar — Rendix" },
+      { title: "Entrar ou cadastrar — Safra Stays" },
       { name: "description", content: "Acesse sua conta ou cadastre-se com o código do seu indicador." },
-      { property: "og:title", content: "Entrar ou cadastrar — Rendix" },
+      { property: "og:title", content: "Entrar ou cadastrar — Safra Stays" },
       { property: "og:description", content: "Cadastre-se com o código do seu indicador." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },

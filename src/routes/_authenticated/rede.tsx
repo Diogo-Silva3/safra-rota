@@ -5,7 +5,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { commissionRates } from "@/lib/crops";
 
 export const Route = createFileRoute("/_authenticated/rede")({
-  head: () => ({ meta: [{ title: "Minha rede — Rendix" }, { name: "description", content: "Árvore de indicações em até 8 níveis." }] }),
+  head: () => ({ meta: [{ title: "Minha rede — Safra Stays" }, { name: "description", content: "Árvore de indicações em até 8 níveis." }] }),
   component: Rede,
 });
 
