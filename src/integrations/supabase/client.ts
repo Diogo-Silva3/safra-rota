@@ -69,7 +69,7 @@ function createSupabaseClient() {
     auth: {
       storage: brokeredPreviewStorage(),
       persistSession: true,
-      autoRefreshToken: true,
+      autoRefreshToken: false,
     },
   });
 }
