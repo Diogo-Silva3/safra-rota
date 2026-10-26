@@ -1,16 +1,16 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { RouterProvider, createRouter } from '@tanstack/react-router'
-import { routeTree } from './routeTree.gen'
+import { RouterProvider } from '@tanstack/react-router'
+import { getRouter } from './router'
 import './styles.css'
 
-// Create a new router instance
-const router = createRouter({ routeTree })
+// Create a new router instance with queryClient context
+const router = getRouter()
 
 // Register the router instance for type safety
 declare module '@tanstack/react-router' {
   interface Register {
-    router: typeof router
+    router: ReturnType<typeof getRouter>
   }
 }
 
