@@ -48,7 +48,7 @@ function createSupabaseFetch(supabaseUrl: string, supabaseKey: string): typeof f
 
 function createSupabaseClient() {
   // Use import.meta.env for client-side (Vite build-time replacement)
-  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://pixelecsswtmdglynsyi.supabase.co';
+  let supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://pixelecsswtmdglynsyi.supabase.co';
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpeGVsZWNzc3d0bWRnbHluc3lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjc0MDksImV4cCI6MjEwNTMwMzQwOX0.pAvnk6N9jN3zI6Jl75nl_UMpFthzo9raE8ETFb8OdMk';
   const SUPABASE_URL = import.meta.env['VITE_SUPABASE_URL'];
   const SUPABASE_KEY = import.meta.env['VITE_SUPABASE_ANON_KEY'];
@@ -63,9 +63,14 @@ function createSupabaseClient() {
     throw new Error(message);
   }
 
-  return createClient<Database>(SUPABASE_URL, SUPABASE_KEY, {
+  // Use CORS proxy on Vercel to bypass DNS issues
+  if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
+    supabaseUrl = 'https://cors-anywhere.herokuapp.com/https://pixelecsswtmdglynsyi.supabase.co';
+  }
+
+  return createClient<Database>(supabaseUrl, SUPABASE_KEY, {
     global: {
-      fetch: createSupabaseFetch(SUPABASE_URL, SUPABASE_KEY),
+      fetch: createSupabaseFetch(supabaseUrl, SUPABASE_KEY),
     },
     auth: {
       storage: brokeredPreviewStorage(),
