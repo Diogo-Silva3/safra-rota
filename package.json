@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "vite build",
+    "build": "vite build && npm run postbuild",
+    "postbuild": "node -e \"const fs=require('fs'); if(fs.existsSync('src/.output/public')) { console.log('Moving src/.output/public to .output/public'); require('child_process').execSync('rm -rf .output/public && mv src/.output/public .output/public || true'); }\"",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "start": "node server.mjs",
