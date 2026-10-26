@@ -70,6 +70,7 @@ function createSupabaseClient() {
       storage: brokeredPreviewStorage(),
       persistSession: false,
       autoRefreshToken: false,
+      detectSessionInUrl: false,
     },
   });
 }
