@@ -8,23 +8,16 @@ const __dirname = dirname(__filename);
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Try .output/public first (TanStack Start), fall back to dist
+// Serve static files from .output/public (TanStack Start build output)
 const publicDir = join(__dirname, '.output', 'public');
-const distDir = join(__dirname, 'dist');
 
 app.use(express.static(publicDir));
-app.use(express.static(distDir));
 
-// SPA fallback
+// SPA fallback - serve index.html for all routes
 app.get('*', (req, res) => {
-  const indexPath = join(publicDir, 'index.html');
-  res.sendFile(indexPath, (err) => {
-    if (err) {
-      res.sendFile(join(distDir, 'index.html'));
-    }
-  });
+  res.sendFile(join(publicDir, 'index.html'));
 });
 
 app.listen(port, () => {
-  console.log(`Server running on http://localhost:${port}`);
+  console.log(`Server running on port ${port}`);
 });
