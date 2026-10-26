@@ -12,7 +12,7 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   build: {
-    outDir: '.output/public',
+    outDir: 'dist',
     emptyOutDir: true,
   },
 });
