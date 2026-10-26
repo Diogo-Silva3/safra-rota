@@ -3,8 +3,8 @@ services:
     name: safra-rota
     env: node
     plan: free
-    buildCommand: npm install && npm run build
-    startCommand: npx serve dist -s -p $PORT
+    buildCommand: bun install && bun run build
+    startCommand: bun run preview
     envVars:
       - key: VITE_SUPABASE_URL
         value: "https://pixelecsswtmdglynsyi.supabase.co"
