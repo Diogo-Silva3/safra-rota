@@ -5,15 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { supabase } from "@/integrations/supabase/client";
 import { brl } from "@/lib/format";
-import { commissionRates, cropImages } from "@/lib/crops";
+import { commissionRates, destinationImages } from "@/lib/destinations";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Rendix — Invista na terra e colha a cada ciclo" },
-      { name: "description", content: "Planos de lavouras a partir de R$ 30, rendimento em dias úteis, rede de indicação em 8 níveis e saque via Pix." },
-      { property: "og:title", content: "Rendix — Invista na terra e colha a cada ciclo" },
-      { property: "og:description", content: "Planos de lavouras a partir de R$ 30, rede em 8 níveis e saque via Pix." },
+      { title: "Safra Stays — Viaje e ganhe enquanto investe em turismo" },
+      { name: "description", content: "12 destinos turísticos premium, rendimento diário, rede de indicação em 8 níveis e saque via Pix." },
+      { property: "og:title", content: "Safra Stays — Viaje e ganhe" },
+      { property: "og:description", content: "Destinos turísticos premium com rendimento diário, rede em 8 níveis e saque via Pix." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -38,20 +38,20 @@ const upTo = (p: Plan) => Number(p.price) * (1 + (Number(p.daily_yield_pct) / 10
 
 const faqs = [
   {
-    q: "O que é a Rendix?",
-    a: "Uma plataforma ligada a planos de produção agrícola, com acompanhamento digital, programa de indicações e saque via Pix.",
+    q: "O que é a Safra Stays?",
+    a: "Uma plataforma de investimento em turismo premium com 12 destinos internacionais, acompanhamento digital, programa de indicações e saque via Pix.",
   },
   {
     q: "Qual o valor inicial?",
-    a: "Os planos começam em R$ 30 (Horta). Valores, regras e benefícios devem sempre ser confirmados no plano vigente no momento da adesão.",
+    a: "Os planos começam a partir de $30 USD. Valores, regras e benefícios devem sempre ser confirmados no plano vigente no momento da adesão.",
   },
   {
     q: "Quanto tempo dura um plano?",
-    a: "Os ciclos são de 30 dias úteis. O rendimento é creditado de segunda a sexta — fins de semana não rendem. O prazo e a taxa aplicáveis são os do plano contratado e aceito pelo usuário.",
+    a: "Os ciclos são de 30 dias. O rendimento é creditado diariamente. O prazo e a taxa aplicáveis são os do plano contratado e aceito pelo usuário.",
   },
   {
     q: "Como acompanho minha participação?",
-    a: "Pelo painel da Rendix, com visão de saldo, ganhos, planos ativos, rede, histórico e solicitações de saque.",
+    a: "Pelo painel da Safra Stays, com visão de saldo, ganhos, planos ativos, rede, histórico e solicitações de saque.",
   },
   {
     q: "Como funcionam as indicações?",
@@ -70,15 +70,14 @@ const faqs = [
 function Index() {
   const plans = usePlans();
   const all = plans.data ?? [];
-  const featured = all.filter((p) => ["Horta", "Soja", "Laranja"].includes(p.name));
+  const featured = all.filter((p) => ["Paris", "Maldivas", "Tóquio"].includes(p.name));
 
   return (
     <div className="min-h-screen">
       <header className="sticky top-0 z-20 border-b bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
           <span className="flex items-center gap-2 font-display text-xl font-bold">
-            <Sprout className="h-6 w-6 text-primary" />
-            Rend<span className="text-primary">ix</span>
+            Safra <span className="text-primary">Stays</span>
           </span>
           <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
             <a href="#como-funciona" className="hover:text-foreground">Como funciona</a>
@@ -101,14 +100,13 @@ function Index() {
       <section className="bg-hero">
         <div className="mx-auto max-w-6xl px-5 pb-14 pt-14 text-center md:pt-24">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
-            <Sprout className="h-3.5 w-3.5" /> RENDIX · AGRONEGÓCIO
+            ✈️ SAFRA STAYS · TURISMO PREMIUM
           </span>
           <h1 className="mx-auto mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
-            Invista na terra. Colha <span className="text-primary">a cada ciclo.</span>
+            Viaje para destinos <span className="text-primary">premium.</span> Ganhe enquanto investe.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
-            A Rendix é uma plataforma de investimento conectada à produção agrícola. Escolha seu plano, acompanhe os rendimentos no painel e construa sua rede.
-          </p>
+            A Safra Stays conecta você a 12 destinos turísticos internacionais com rendimento diário. Escolha seu destino, acompanhe os ganhos e construa sua rede.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild size="lg" className="shadow-glow">
               <Link to="/auth" search={{ mode: "signup" }}>Começar agora <ArrowRight className="ml-1 h-4 w-4" /></Link>
@@ -126,11 +124,11 @@ function Index() {
           <div className="mt-12 grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
             {all.map((p) => (
               <Link key={p.id} to="/auth" search={{ mode: "signup" }} className="group overflow-hidden rounded-2xl border bg-card text-left shadow-sm transition hover:shadow-md">
-                <img src={cropImages[p.name]} alt={p.name} loading="lazy" width={1024} height={768} className="aspect-[4/3] w-full object-cover" />
+                <img src={destinationImages[p.name]} alt={p.name} loading="lazy" width={1024} height={768} className="aspect-[4/3] w-full object-cover" />
                 <div className="p-3">
                   <p className="font-semibold">{p.name}</p>
                   <p className="text-xs text-muted-foreground">
-                    {brl(p.price)} → <span className="font-semibold text-primary">até {brl(upTo(p))}</span>
+                    ${p.price} → <span className="font-semibold text-primary">até ${upTo(p).toFixed(0)}</span>
                   </p>
                 </div>
               </Link>
@@ -141,8 +139,8 @@ function Index() {
         <div className="border-y bg-card">
           <div className="mx-auto grid max-w-6xl grid-cols-1 divide-y sm:grid-cols-3 sm:divide-x sm:divide-y-0">
             {[
-              { t: "A partir de", v: "R$ 30", s: "Plano Horta" },
-              { t: "Ciclos de", v: "30 dias úteis", s: "Visão completa no painel" },
+              { t: "A partir de", v: "$30 USD", s: "Destino mais acessível" },
+              { t: "Ciclos de", v: "30 dias", s: "Rendimento diário completo" },
               { t: "Indique e cresça", v: "Até 8 níveis", s: "Comissões por indicação" },
             ].map((s) => (
               <div key={s.v} className="px-5 py-6 text-center">
@@ -185,32 +183,31 @@ function Index() {
       {/* Planos */}
       <section id="planos" className="border-y bg-secondary/50 scroll-mt-20">
         <div className="mx-auto max-w-6xl px-5 py-16 md:py-24">
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary">Planos Rendix</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">Destinos Safra Stays</p>
           <h2 className="mt-2 max-w-2xl text-3xl font-bold md:text-4xl">
-            Comece no seu ritmo.
+            Doze paradisíacos à sua escolha.
           </h2>
           <p className="mt-3 max-w-xl text-muted-foreground">
-            Seis lavouras para escolher, com ciclo de 30 dias úteis. Confira as condições de cada uma antes de confirmar.
-          </p>
+            12 destinos turísticos com ciclo de 30 dias. Confira as condições de cada um antes de confirmar seu investimento.</p>
           <div className="mt-10 grid gap-5 md:grid-cols-3">
             {featured.map((p) => (
               <div key={p.id} className="overflow-hidden rounded-2xl border bg-card shadow-sm">
-                <img src={cropImages[p.name]} alt={p.name} loading="lazy" width={1024} height={768} className="aspect-[16/9] w-full object-cover" />
+                <img src={destinationImages[p.name]} alt={p.name} loading="lazy" width={1024} height={768} className="aspect-[16/9] w-full object-cover" />
                 <div className="p-6">
                   <div className="flex items-center justify-between">
                     <h3 className="text-xl font-bold">{p.name}</h3>
-                    {p.name === "Soja" && <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">Mais escolhido</span>}
+                    {p.name === "Maldivas" && <span className="rounded-full bg-primary px-2.5 py-0.5 text-xs font-semibold text-primary-foreground">Mais escolhido</span>}
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">{p.description}</p>
                   <p className="mt-4 text-xs text-muted-foreground">A partir de</p>
-                  <p className="font-display text-3xl font-bold">{brl(p.price)}</p>
+                  <p className="font-display text-3xl font-bold">${p.price}</p>
                   <ul className="mt-4 space-y-1.5 text-sm">
-                    <li className="flex items-center gap-2"><Clock className="h-4 w-4 text-primary" /> {p.duration_days} dias úteis</li>
-                    <li className="flex items-center gap-2"><LayoutDashboard className="h-4 w-4 text-primary" /> Acompanhamento diário no painel</li>
-                    <li className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> Comissões de rede elegíveis</li>
+                    <li className="flex items-center gap-2"><Clock className="h-4 w-4 text-primary" /> {p.duration_days} dias</li>
+                    <li className="flex items-center gap-2"><LayoutDashboard className="h-4 w-4 text-primary" /> Acompanhamento diário</li>
+                    <li className="flex items-center gap-2"><Users className="h-4 w-4 text-primary" /> Comissões de rede</li>
                   </ul>
                   <Button asChild className="mt-6 w-full">
-                    <Link to="/auth" search={{ mode: "signup" }}>Ver condições</Link>
+                    <Link to="/auth" search={{ mode: "signup" }}>Ver destino</Link>
                   </Button>
                 </div>
               </div>
@@ -320,9 +317,9 @@ function Index() {
       {/* CTA final */}
       <section className="bg-balance">
         <div className="mx-auto max-w-6xl px-5 py-16 text-center text-primary-foreground md:py-20">
-          <h2 className="text-3xl font-bold md:text-4xl">Coloque seu investimento em movimento.</h2>
+          <h2 className="text-3xl font-bold md:text-4xl">Comece sua jornada de viagens e ganhos.</h2>
           <p className="mx-auto mt-3 max-w-xl opacity-90">
-            Explore os planos, leia as condições e acompanhe cada etapa no painel da Rendix.
+            Explore os destinos, leia as condições e acompanhe cada etapa no painel da Safra Stays.
           </p>
           <Button asChild size="lg" variant="secondary" className="mt-7">
             <Link to="/auth" search={{ mode: "signup" }}>Criar conta grátis</Link>
@@ -333,9 +330,9 @@ function Index() {
       <footer className="border-t">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-8 text-sm text-muted-foreground sm:flex-row">
           <span className="flex items-center gap-2 font-display font-bold text-foreground">
-            <Sprout className="h-5 w-5 text-primary" /> Rendix
+            Safra Stays
           </span>
-          <p>Resultados passados ou simulações não garantem resultados futuros.</p>
+          <p>Resultados passados ou simulações não garantem resultados futuros em investimentos de turismo.</p>
         </div>
       </footer>
     </div>
