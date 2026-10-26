@@ -8,12 +8,21 @@ const __dirname = dirname(__filename);
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Serve static files from dist
-app.use(express.static(join(__dirname, 'dist')));
+// Try .output/public first (TanStack Start), fall back to dist
+const publicDir = join(__dirname, '.output', 'public');
+const distDir = join(__dirname, 'dist');
+
+app.use(express.static(publicDir));
+app.use(express.static(distDir));
 
 // SPA fallback
 app.get('*', (req, res) => {
-  res.sendFile(join(__dirname, 'dist', 'index.html'));
+  const indexPath = join(publicDir, 'index.html');
+  res.sendFile(indexPath, (err) => {
+    if (err) {
+      res.sendFile(join(distDir, 'index.html'));
+    }
+  });
 });
 
 app.listen(port, () => {
