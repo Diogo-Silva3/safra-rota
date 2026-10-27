@@ -28,13 +28,8 @@ function createSupabaseFetch(supabaseUrl: string, supabaseKey: string): typeof f
 }
 
 function createSupabaseClient() {
-  let supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://pixelecsswtmdglynsyi.supabase.co';
+  const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://pixelecsswtmdglynsyi.supabase.co';
   const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpeGVsZWNzc3d0bWRnbHluc3lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjc0MDksImV4cCI6MjEwNTMwMzQwOX0.pAvnk6N9jN3zI6Jl75nl_UMpFthzo9raE8ETFb8OdMk';
-
-  // Use Netlify function proxy if on Netlify
-  if (typeof window !== 'undefined' && window.location.hostname.includes('netlify.app')) {
-    supabaseUrl = `${window.location.origin}/.netlify/functions/supabase-proxy`;
-  }
 
   return createClient<Database>(supabaseUrl, supabaseKey, {
     global: {
