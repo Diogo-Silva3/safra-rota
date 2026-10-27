@@ -107,9 +107,22 @@ function Index() {
       {/* Hero */}
       <section className="bg-hero">
         <div className="mx-auto max-w-6xl px-5 pb-14 pt-14 text-center md:pt-24">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
-            ✈️ season-rental · TURISMO PREMIUM
-          </span>
+          <div className="inline-flex flex-col items-center gap-3 rounded-2xl bg-accent/10 px-6 py-4 border border-accent/20">
+            <svg width="48" height="48" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
+              <circle cx="16" cy="16" r="15" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+              <path d="M16 6 Q22 8 20 14 Q18 18 12 18 Q8 18 10 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>
+              <path d="M22 8 L26 4 M22 8 L24 12" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M16 2 L16 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M16 26 L16 30" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M2 16 L6 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M26 16 L30 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+            <div>
+              <p className="font-display text-lg font-bold">Season Rental</p>
+              <p className="text-xs font-semibold text-muted-foreground">TURISMO PREMIUM</p>
+              <p className="text-xs font-semibold text-muted-foreground">INVESTIMENTO DIÁRIO</p>
+            </div>
+          </div>
           <h1 className="mx-auto mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
             Viaje para destinos <span className="text-primary">premium.</span> Ganhe enquanto investe.
           </h1>
