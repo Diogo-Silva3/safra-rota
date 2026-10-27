@@ -37,9 +37,9 @@ function createSupabaseClient() {
     },
     auth: {
       storage: brokeredPreviewStorage(),
-      persistSession: false,
-      autoRefreshToken: false,
-      detectSessionInUrl: false,
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
     },
   });
 }
