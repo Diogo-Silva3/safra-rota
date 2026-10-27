@@ -34,7 +34,7 @@ function Layout() {
       <aside className="fixed inset-y-0 left-0 hidden w-60 flex-col border-r bg-card p-5 md:flex">
         <span className="flex items-center gap-2 font-display text-xl font-bold">
           <Sprout className="h-6 w-6 text-primary" />
-          Rend<span className="text-primary">ix</span>
+          season<span className="text-primary">-rental</span>
         </span>
         <nav className="mt-8 flex flex-1 flex-col gap-1">
           {nav.map((n) => (
@@ -55,7 +55,7 @@ function Layout() {
       <header className="flex items-center justify-between border-b px-5 py-4 md:hidden">
         <span className="flex items-center gap-2 font-display text-lg font-bold">
           <Sprout className="h-5 w-5 text-primary" />
-          Rend<span className="text-primary">ix</span>
+          season<span className="text-primary">-rental</span>
         </span>
         <button onClick={signOut} aria-label="Sair" className="text-muted-foreground">
           <LogOut className="h-5 w-5" />

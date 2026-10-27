@@ -77,7 +77,7 @@ function Index() {
       <header className="sticky top-0 z-20 border-b bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
           <span className="flex items-center gap-2 font-display text-xl font-bold">
-            Safra <span className="text-primary">Stays</span>
+            season<span className="text-primary">-rental</span>
           </span>
           <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
             <a href="#como-funciona" className="hover:text-foreground">Como funciona</a>
