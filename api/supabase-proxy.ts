@@ -4,13 +4,12 @@ export default async function handler(
   request: VercelRequest,
   response: VercelResponse
 ) {
+  const supabaseUrl = 'https://pixelecsswtmdglynsyi.supabase.co';
+  const apiKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpeGVsZWNzc3d0bWRnbHluc3lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjc0MDksImV4cCI6MjEwNTMwMzQwOX0.pAvnk6N9jN3zI6Jl75nl_UMpFthzo9raE8ETFb8OdMk';
+
   // Parse the path from URL - remove /api/supabase prefix
   const pathSegments = request.url?.split('/api/supabase')[1] || '';
   const searchParams = new URL(request.url || '', 'http://localhost').search;
-  
-  const supabaseUrl = process.env.VITE_SUPABASE_URL || 'https://pixelecsswtmdglynsyi.supabase.co';
-  const apiKey = process.env.VITE_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBpeGVsZWNzc3d0bWRnbHluc3lpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk3Mjc0MDksImV4cCI6MjEwNTMwMzQwOX0.pAvnk6N9jN3zI6Jl75nl_UMpFthzo9raE8ETFb8OdMk';
-
   const targetUrl = `${supabaseUrl}${pathSegments}${searchParams}`;
 
   try {
