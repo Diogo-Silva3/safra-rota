@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button";
 import { brl } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/pix/$id")({
-  head: () => ({ meta: [{ title: "Pagamento Pix — Safra Stays" }, { name: "description", content: "Pague seu plano via Pix." }] }),
+  head: () => ({ meta: [{ title: "Pagamento Pix — season-rental" }, { name: "description", content: "Pague seu plano via Pix." }] }),
   component: Pix,
 });
 

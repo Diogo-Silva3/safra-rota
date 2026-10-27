@@ -9,7 +9,7 @@ import { Button } from "@/components/ui/button";
 import { brl } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/dashboard")({
-  head: () => ({ meta: [{ title: "Painel — Safra Stays" }, { name: "description", content: "Seu saldo, rendimentos e convites." }] }),
+  head: () => ({ meta: [{ title: "Painel — season-rental" }, { name: "description", content: "Seu saldo, rendimentos e convites." }] }),
   component: Dashboard,
 });
 

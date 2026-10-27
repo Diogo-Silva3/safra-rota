@@ -10,9 +10,9 @@ import { commissionRates, destinationImages } from "@/lib/destinations";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Safra Stays — Viaje e ganhe enquanto investe em turismo" },
+      { title: "season-rental — Viaje e ganhe enquanto investe em turismo" },
       { name: "description", content: "12 destinos turísticos premium, rendimento diário, rede de indicação em 8 níveis e saque via Pix." },
-      { property: "og:title", content: "Safra Stays — Viaje e ganhe" },
+      { property: "og:title", content: "season-rental — Viaje e ganhe" },
       { property: "og:description", content: "Destinos turísticos premium com rendimento diário, rede em 8 níveis e saque via Pix." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -38,7 +38,7 @@ const upTo = (p: Plan) => Number(p.price) * (1 + (Number(p.daily_yield_pct) / 10
 
 const faqs = [
   {
-    q: "O que é a Safra Stays?",
+    q: "O que é a season-rental?",
     a: "Uma plataforma de investimento em turismo premium com 12 destinos internacionais, acompanhamento digital, programa de indicações e saque via Pix.",
   },
   {
@@ -51,7 +51,7 @@ const faqs = [
   },
   {
     q: "Como acompanho minha participação?",
-    a: "Pelo painel da Safra Stays, com visão de saldo, ganhos, planos ativos, rede, histórico e solicitações de saque.",
+    a: "Pelo painel da season-rental, com visão de saldo, ganhos, planos ativos, rede, histórico e solicitações de saque.",
   },
   {
     q: "Como funcionam as indicações?",
@@ -100,13 +100,13 @@ function Index() {
       <section className="bg-hero">
         <div className="mx-auto max-w-6xl px-5 pb-14 pt-14 text-center md:pt-24">
           <span className="inline-flex items-center gap-1.5 rounded-full bg-accent px-3 py-1 text-xs font-semibold text-accent-foreground">
-            ✈️ SAFRA STAYS · TURISMO PREMIUM
+            ✈️ season-rental · TURISMO PREMIUM
           </span>
           <h1 className="mx-auto mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
             Viaje para destinos <span className="text-primary">premium.</span> Ganhe enquanto investe.
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-lg text-muted-foreground">
-            A Safra Stays conecta você a 12 destinos turísticos internacionais com rendimento diário. Escolha seu destino, acompanhe os ganhos e construa sua rede.</p>
+            A season-rental conecta você a 12 destinos turísticos internacionais com rendimento diário. Escolha seu destino, acompanhe os ganhos e construa sua rede.</p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
             <Button asChild size="lg" className="shadow-glow">
               <Link to="/auth" search={{ mode: "signup" }}>Começar agora <ArrowRight className="ml-1 h-4 w-4" /></Link>
@@ -183,7 +183,7 @@ function Index() {
       {/* Planos */}
       <section id="planos" className="border-y bg-secondary/50 scroll-mt-20">
         <div className="mx-auto max-w-6xl px-5 py-16 md:py-24">
-          <p className="text-xs font-semibold uppercase tracking-widest text-primary">Destinos Safra Stays</p>
+          <p className="text-xs font-semibold uppercase tracking-widest text-primary">Destinos season-rental</p>
           <h2 className="mt-2 max-w-2xl text-3xl font-bold md:text-4xl">
             Doze paradisíacos à sua escolha.
           </h2>
@@ -319,7 +319,7 @@ function Index() {
         <div className="mx-auto max-w-6xl px-5 py-16 text-center text-primary-foreground md:py-20">
           <h2 className="text-3xl font-bold md:text-4xl">Comece sua jornada de viagens e ganhos.</h2>
           <p className="mx-auto mt-3 max-w-xl opacity-90">
-            Explore os destinos, leia as condições e acompanhe cada etapa no painel da Safra Stays.
+            Explore os destinos, leia as condições e acompanhe cada etapa no painel da season-rental.
           </p>
           <Button asChild size="lg" variant="secondary" className="mt-7">
             <Link to="/auth" search={{ mode: "signup" }}>Criar conta grátis</Link>
@@ -330,7 +330,7 @@ function Index() {
       <footer className="border-t">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-3 px-5 py-8 text-sm text-muted-foreground sm:flex-row">
           <span className="flex items-center gap-2 font-display font-bold text-foreground">
-            Safra Stays
+            season-rental
           </span>
           <p>Resultados passados ou simulações não garantem resultados futuros em investimentos de turismo.</p>
         </div>

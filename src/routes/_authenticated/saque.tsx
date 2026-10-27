@@ -10,7 +10,7 @@ import { Label } from "@/components/ui/label";
 import { brl } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/saque")({
-  head: () => ({ meta: [{ title: "Saque via Pix — Safra Stays" }, { name: "description", content: "Solicite o saque do seu saldo via Pix." }] }),
+  head: () => ({ meta: [{ title: "Saque via Pix — season-rental" }, { name: "description", content: "Solicite o saque do seu saldo via Pix." }] }),
   component: Saque,
 });
 

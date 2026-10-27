@@ -8,7 +8,7 @@ import { brl } from "@/lib/format";
 import { destinationImages } from "@/lib/destinations";
 
 export const Route = createFileRoute("/_authenticated/planos")({
-  head: () => ({ meta: [{ title: "Destinos — Safra Stays" }, { name: "description", content: "Destinos turísticos premium disponíveis para investimento." }] }),
+  head: () => ({ meta: [{ title: "Destinos — season-rental" }, { name: "description", content: "Destinos turísticos premium disponíveis para investimento." }] }),
   component: Planos,
 });
 
