@@ -107,14 +107,7 @@ function Index() {
       {/* Hero */}
       <section className="bg-hero">
         <div className="mx-auto max-w-6xl px-5 pb-14 pt-14 text-center md:pt-24">
-          <div className="inline-flex flex-col items-center gap-3 rounded-2xl bg-accent/10 px-6 py-4 border border-accent/20">
-            <img src="/src/assets/logo.png" alt="Season Rental" width="48" height="48" className="h-12 w-12" />
-            <div>
-              <p className="font-display text-lg font-bold">Season Rental</p>
-              <p className="text-xs font-semibold text-muted-foreground">TURISMO PREMIUM</p>
-              <p className="text-xs font-semibold text-muted-foreground">INVESTIMENTO DIÁRIO</p>
-            </div>
-          </div>
+          <img src="/src/assets/logo1.png" alt="Season Rental - Turismo Premium - Investimento Diário" className="mx-auto h-auto max-w-sm" />
           <h1 className="mx-auto mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
             Viaje para destinos <span className="text-primary">premium.</span> Ganhe enquanto investe.
           </h1>
