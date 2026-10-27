@@ -76,9 +76,17 @@ function Index() {
     <div className="min-h-screen">
       <header className="sticky top-0 z-20 border-b bg-background/90 backdrop-blur">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4">
-          <span className="flex items-center gap-2 font-display text-xl font-bold">
-            season<span className="text-primary">-rental</span>
-          </span>
+          <Link to="/" className="flex items-center gap-2">
+            <svg width="28" height="28" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-primary">
+              <circle cx="16" cy="16" r="15" stroke="currentColor" strokeWidth="1.5" fill="none"/>
+              <path d="M16 6 Q22 8 20 14 Q18 18 12 18 Q8 18 10 24" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round"/>
+              <path d="M22 8 L26 4 M22 8 L24 12" stroke="currentColor" strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M16 2 L16 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M16 26 L16 30" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M2 16 L6 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path d="M26 16 L30 16" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+            </svg>
+          </Link>
           <nav className="hidden items-center gap-6 text-sm text-muted-foreground md:flex">
             <a href="#como-funciona" className="hover:text-foreground">Como funciona</a>
             <a href="#planos" className="hover:text-foreground">Planos</a>
