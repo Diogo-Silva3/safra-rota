@@ -107,7 +107,7 @@ function Index() {
       {/* Hero */}
       <section className="bg-hero">
         <div className="mx-auto max-w-6xl px-5 pb-14 pt-14 text-center md:pt-24">
-          <img src="/src/assets/logo1.png" alt="Season Rental - Turismo Premium - Investimento Diário" className="mx-auto h-auto max-w-sm" />
+          <img src={require("../assets/logo1.png")} alt="Season Rental - Turismo Premium - Investimento Diário" className="mx-auto h-auto max-w-sm" />
           <h1 className="mx-auto mt-5 max-w-3xl text-4xl font-bold leading-tight md:text-6xl">
             Viaje para destinos <span className="text-primary">premium.</span> Ganhe enquanto investe.
           </h1>
