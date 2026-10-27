@@ -93,7 +93,7 @@ function AuthPage() {
       <div className="flex min-h-screen items-center justify-center bg-hero px-5 py-10">
         <div className="w-full max-w-md text-center">
           <Link to="/" className="font-display text-2xl font-bold">
-            Rend<span className="text-primary">ix</span>
+            season<span className="text-primary">-rental</span>
           </Link>
           <div className="mt-6 rounded-2xl border bg-card p-8 shadow-glow">
             <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-4xl">
