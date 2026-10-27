@@ -1,17 +1,22 @@
 import express from 'express';
 import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const app = express();
 const port = process.env.PORT || 5000;
 
-// Use process.cwd() to get ACTUAL working directory on Render
-// On Render: process.cwd() = /opt/render/project
-const projectRoot = process.cwd();
-const publicDir = path.join(projectRoot, '.output', 'public');
+// On Render: __dirname = /opt/render/project
+// Build output should be at /opt/render/project/.output/public
+const publicDir = path.join(__dirname, '.output', 'public');
 
-console.log('[server] project root:', projectRoot);
-console.log('[server] serving from:', publicDir);
+console.log('[server] __dirname:', __dirname);
+console.log('[server] publicDir:', publicDir);
 
+// Serve static files
 app.use(express.static(publicDir));
 
 // SPA fallback - serve index.html for all routes

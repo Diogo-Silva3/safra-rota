@@ -63,9 +63,9 @@ function createSupabaseClient() {
     throw new Error(message);
   }
 
-  // Use CORS proxy on Vercel to bypass DNS issues
+  // Use local API proxy on Vercel to bypass DNS issues
   if (typeof window !== 'undefined' && window.location.hostname.includes('vercel.app')) {
-    supabaseUrl = 'https://cors-anywhere.herokuapp.com/https://pixelecsswtmdglynsyi.supabase.co';
+    supabaseUrl = `${window.location.origin}/api/supabase`;
   }
 
   return createClient<Database>(supabaseUrl, SUPABASE_KEY, {
